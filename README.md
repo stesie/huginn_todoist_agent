@@ -1,8 +1,10 @@
 # TodoistAgent
 
-Welcome to your new agent gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/huginn_todoist_agent`. To experiment with that code, run `bin/console` for an interactive prompt.
+The Todoist Agent is a plugin for [Huginn](https://github.com/cantino/huginn) that
+creates one item on your [Todoist](https://todoist.com) for every event it receives.
 
-TODO: Delete this and the text above, and describe your gem
+It allows to set the items due date, project, priority and labels (if you have
+Todoist Pro version).
 
 ## Installation
 
@@ -38,7 +40,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/huginn_todoist_agent/fork )
+1. Fork it ( https://github.com/stesie/huginn_todoist_agent/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
