@@ -8,10 +8,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Stefan Siegl"]
   spec.email         = ["stesie@brokenpipe.de"]
 
-  spec.summary       = %q{Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{Write a longer description or delete this line.}
+  spec.summary       = %q{Huginn agent to add items to your Todoist.}
+  spec.description   = %q{The Todoist Agent will create one item on your Todoist for every Huginn event it receives.}
 
-  spec.homepage      = "https://github.com/[my-github-username]/huginn_todoist_agent"
+  spec.homepage      = "https://github.com/stesie/huginn_todoist_agent"
 
   spec.license       = "MIT"
 
@@ -25,4 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
 
   spec.add_runtime_dependency "huginn_agent"
+  spec.add_runtime_dependency 'ruby-todoist-api', '~> 0.3'
 end
