@@ -16,6 +16,11 @@ describe Agents::TodoistAgent do
     @event.agent = agents(:bob_weather_agent)
     @event.payload = {
       'somekey' => 'somevalue',
+      'some_date' => 'May 23',
+      'some_project_id' => '2342',
+      'some_priority' => '2',
+      'a_single_label' => '42',
+      'some_labels' => '23,42,  5',
     }
 
     @sent_requests = Array.new
@@ -53,51 +58,103 @@ describe Agents::TodoistAgent do
   end
 
   describe "#receive" do
-    it 'can create a new static item' do
-      @checker.receive([@event])
-      expect(@sent_requests.length).to eq(1)
-      expect(@sent_requests[0]["type"]).to eq("item_add")
-      expect(@sent_requests[0]["args"]["content"]).to eq("foobar")
+    describe "with static content configuration" do
+      it 'can create a new static item' do
+	@checker.receive([@event])
+	expect(@sent_requests.length).to eq(1)
+	expect(@sent_requests[0]["type"]).to eq("item_add")
+	expect(@sent_requests[0]["args"]["content"]).to eq("foobar")
+      end
+
+      it "passes date_string to the new item" do
+	@checker.options["date_string"] = "today"
+	expect(@checker).to be_valid
+
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["date_string"]).to eq("today")
+      end
+
+      it "passes project_id to the new item" do
+	@checker.options["project_id"] = "23"
+	expect(@checker).to be_valid
+
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["project_id"]).to eq(23)
+      end
+
+      it "passes priority to the new item" do
+	@checker.options["priority"] = "3"
+	expect(@checker).to be_valid
+
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["priority"]).to eq(3)
+      end
+
+      it "passes a single label to the new item" do
+	@checker.options["labels"] = "23"
+	expect(@checker).to be_valid
+
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["labels"]).to eq([23])
+      end
+
+      it "passes multiple labels to the new item" do
+	@checker.options["labels"] = "23, 42"
+	expect(@checker).to be_valid
+
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["labels"]).to eq([23, 42])
+      end
     end
 
-    it "passes date_string to the new item" do
-      @checker.options["date_string"] = "today"
-      expect(@checker).to be_valid
+    describe "with content interpolation" do
+      it 'content can be interpolated' do
+	@checker.options["content"] = "Event Data: {{ somekey }}"
+	expect(@checker).to be_valid
 
-      @checker.receive([@event])
-      expect(@sent_requests[0]["args"]["date_string"]).to eq("today")
-    end
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["content"]).to eq("Event Data: somevalue")
+      end
 
-    it "passes project_id to the new item" do
-      @checker.options["project_id"] = "23"
-      expect(@checker).to be_valid
+      it "date_string can be interpolated" do
+	@checker.options["date_string"] = "{{ some_date }}"
+	expect(@checker).to be_valid
 
-      @checker.receive([@event])
-      expect(@sent_requests[0]["args"]["project_id"]).to eq(23)
-    end
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["date_string"]).to eq("May 23")
+      end
 
-    it "passes priority to the new item" do
-      @checker.options["priority"] = "3"
-      expect(@checker).to be_valid
+      it "project_id can be interpolated" do
+	@checker.options["project_id"] = "{{ some_project_id }}"
+	expect(@checker).to be_valid
 
-      @checker.receive([@event])
-      expect(@sent_requests[0]["args"]["priority"]).to eq(3)
-    end
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["project_id"]).to eq(2342)
+      end
 
-    it "passes a single label to the new item" do
-      @checker.options["labels"] = "23"
-      expect(@checker).to be_valid
+      it "priority can be interpolated" do
+	@checker.options["priority"] = "{{ some_priority }}"
+	expect(@checker).to be_valid
 
-      @checker.receive([@event])
-      expect(@sent_requests[0]["args"]["labels"]).to eq([23])
-    end
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["priority"]).to eq(2)
+      end
 
-    it "passes multiple labels to the new item" do
-      @checker.options["labels"] = "23, 42"
-      expect(@checker).to be_valid
+      it "single label can be interpolated" do
+	@checker.options["labels"] = "{{ a_single_label }}"
+	expect(@checker).to be_valid
 
-      @checker.receive([@event])
-      expect(@sent_requests[0]["args"]["labels"]).to eq([23, 42])
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["labels"]).to eq([42])
+      end
+
+      it "multiple labels can be interpolated" do
+	@checker.options["labels"] = "{{ some_labels }}"
+	expect(@checker).to be_valid
+
+	@checker.receive([@event])
+	expect(@sent_requests[0]["args"]["labels"]).to eq([23, 42, 5])
+      end
     end
   end
 end
