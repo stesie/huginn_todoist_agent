@@ -156,5 +156,10 @@ describe Agents::TodoistAgent do
 	expect(@sent_requests[0]["args"]["labels"]).to eq([23, 42, 5])
       end
     end
+
+    it 'creates two items for two events' do
+      @checker.receive([@event, @event])
+      expect(@sent_requests.length).to eq(2)
+    end
   end
 end
