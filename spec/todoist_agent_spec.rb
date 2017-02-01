@@ -17,9 +17,8 @@ describe Agents::TodoistAgent do
     @event.payload = {
       'somekey' => 'somevalue',
     }
-  end
 
-  it 'can create a new static item' do
+    @sent_requests = Array.new
     stub_request(:post, "https://todoist.com/API/v6/sync").
       to_return { |request|
 	expect(request.headers["Content-Type"]).to eq("application/x-www-form-urlencoded")
@@ -29,24 +28,36 @@ describe Agents::TodoistAgent do
 
 	json_data = ActiveSupport::JSON.decode(form_data.assoc("commands").last)
 	expect(json_data.length).to eq(1)
-	expect(json_data[0]["type"]).to eq("item_add")
-	expect(json_data[0]["args"]["content"]).to eq("foobar")
 
-	json_response = {
-	  "TempIdMapping" => {
-	    json_data[0]["temp_id"] => 81662555
-	  },
-	  "seq_no_global" => 11248873939,
-	  "seq_no" => 11248873939,
-	  "UserId" => 9933517,
-	  "SyncStatus" => {
-	    json_data[0]["uuid"] => "oK"
-	  },
-	}
+	@sent_requests << req = json_data[0]
+
+	case json_data[0]["type"]
+	when "item_add"
+	  json_response = {
+	    "TempIdMapping" => {
+	      json_data[0]["temp_id"] => 81662555
+	    },
+	    "seq_no_global" => 11248873939,
+	    "seq_no" => 11248873939,
+	    "UserId" => 9933517,
+	    "SyncStatus" => {
+	      json_data[0]["uuid"] => "oK"
+	    },
+	  }
+	else
+	  raise "Unexpected type: #{json_data[0]["type"]}"
+	end
 
 	{ status: 200, body: ActiveSupport::JSON.encode(json_response), headers: { "Content-type" => "application/json" } }
       }
+  end
 
-    @checker.receive([@event])
+  describe "#receive" do
+    it 'can create a new static item' do
+      @checker.receive([@event])
+      expect(@sent_requests.length).to eq(1)
+      expect(@sent_requests[0]["type"]).to eq("item_add")
+      expect(@sent_requests[0]["args"]["content"]).to eq("foobar")
+    end
   end
 end
