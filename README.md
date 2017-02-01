@@ -1,5 +1,8 @@
 # TodoistAgent
 
+[![Build Status](https://travis-ci.org/stesie/huginn_todoist_agent.svg?branch=master)](https://travis-ci.org/stesie/huginn_todoist_agent)
+[![Gem Version](https://badge.fury.io/rb/huginn_todoist_agent.svg)](https://badge.fury.io/rb/huginn_todoist_agent)
+
 The Todoist Agent is a plugin for [Huginn](https://github.com/cantino/huginn) that
 creates one item on your [Todoist](https://todoist.com) for every event it receives.
 
