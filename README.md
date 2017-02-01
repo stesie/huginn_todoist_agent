@@ -36,8 +36,6 @@ Make sure to delete the `spec/huginn` directory and re-run `rake` after changing
 
 After the setup is done `rake spec` will only run the tests, without cloning the Huginn source again.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
 ## Contributing
 
 1. Fork it ( https://github.com/stesie/huginn_todoist_agent/fork )
