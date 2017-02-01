@@ -57,6 +57,14 @@ describe Agents::TodoistAgent do
       }
   end
 
+  describe "#validate_options" do
+    it "rejects an empty token" do
+      @checker.options["token"] = ""
+      expect(@checker).not_to be_valid
+    end
+
+  end
+
   describe "#receive" do
     describe "with static content configuration" do
       it 'can create a new static item' do
