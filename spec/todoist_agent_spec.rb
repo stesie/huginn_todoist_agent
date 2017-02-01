@@ -59,5 +59,45 @@ describe Agents::TodoistAgent do
       expect(@sent_requests[0]["type"]).to eq("item_add")
       expect(@sent_requests[0]["args"]["content"]).to eq("foobar")
     end
+
+    it "passes date_string to the new item" do
+      @checker.options["date_string"] = "today"
+      expect(@checker).to be_valid
+
+      @checker.receive([@event])
+      expect(@sent_requests[0]["args"]["date_string"]).to eq("today")
+    end
+
+    it "passes project_id to the new item" do
+      @checker.options["project_id"] = "23"
+      expect(@checker).to be_valid
+
+      @checker.receive([@event])
+      expect(@sent_requests[0]["args"]["project_id"]).to eq(23)
+    end
+
+    it "passes priority to the new item" do
+      @checker.options["priority"] = "3"
+      expect(@checker).to be_valid
+
+      @checker.receive([@event])
+      expect(@sent_requests[0]["args"]["priority"]).to eq(3)
+    end
+
+    it "passes a single label to the new item" do
+      @checker.options["labels"] = "23"
+      expect(@checker).to be_valid
+
+      @checker.receive([@event])
+      expect(@sent_requests[0]["args"]["labels"]).to eq([23])
+    end
+
+    it "passes multiple labels to the new item" do
+      @checker.options["labels"] = "23, 42"
+      expect(@checker).to be_valid
+
+      @checker.receive([@event])
+      expect(@sent_requests[0]["args"]["labels"]).to eq([23, 42])
+    end
   end
 end
