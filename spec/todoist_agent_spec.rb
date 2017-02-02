@@ -23,13 +23,14 @@ describe Agents::TodoistAgent do
       'some_labels' => '23,42,  5',
     }
 
+    @expected_token = "some_token_here"
     @sent_requests = Array.new
     stub_request(:post, "https://todoist.com/API/v6/sync").
       to_return { |request|
 	expect(request.headers["Content-Type"]).to eq("application/x-www-form-urlencoded")
 
 	form_data = URI.decode_www_form(request.body)
-	expect(form_data.assoc("token").last).to eq("some_token_here")
+	expect(form_data.assoc("token").last).to eq(@expected_token)
 
 	json_data = ActiveSupport::JSON.decode(form_data.assoc("commands").last)
 	expect(json_data.length).to eq(1)
@@ -58,11 +59,20 @@ describe Agents::TodoistAgent do
   end
 
   describe "#validate_options" do
-    it "rejects an empty token" do
-      @checker.options["token"] = ""
+    before do
+      expect(@checker).to be_valid
+    end
+
+    it "should reject an empty token" do
+      @checker.options["token"] = nil
       expect(@checker).not_to be_valid
     end
 
+    it "should also allow a credential" do
+      @checker.user.user_credentials.create :credential_name => "todoist_auth_token", :credential_value => "some_credential_here"
+      @checker.options["token"] = nil
+      expect(@checker).to be_valid
+    end
   end
 
   describe "#receive" do
@@ -168,6 +178,39 @@ describe Agents::TodoistAgent do
     it 'creates two items for two events' do
       @checker.receive([@event, @event])
       expect(@sent_requests.length).to eq(2)
+    end
+
+    it "should use the credential token if no token is present" do
+      @checker.user.user_credentials.create :credential_name => "todoist_auth_token", :credential_value => "some_credential_here"
+      @checker.options["token"] = nil
+
+      @expected_token = "some_credential_here"
+      @checker.receive([@event])
+
+      expect(@sent_requests.length).to eq(1)
+      expect(@sent_requests[0]["type"]).to eq("item_add")
+      expect(@sent_requests[0]["args"]["content"]).to eq("foobar")
+    end
+
+    it "should use the credential token if an empty token is given" do
+      @checker.user.user_credentials.create :credential_name => "todoist_auth_token", :credential_value => "some_credential_here"
+      @checker.options["token"] = ""
+
+      @expected_token = "some_credential_here"
+      @checker.receive([@event])
+
+      expect(@sent_requests.length).to eq(1)
+      expect(@sent_requests[0]["type"]).to eq("item_add")
+      expect(@sent_requests[0]["args"]["content"]).to eq("foobar")
+    end
+
+    it "should use the provided token, if both a credential and immediate token are given" do
+      @checker.user.user_credentials.create :credential_name => "todoist_auth_token", :credential_value => "some_credential_here"
+      @checker.receive([@event])
+
+      expect(@sent_requests.length).to eq(1)
+      expect(@sent_requests[0]["type"]).to eq("item_add")
+      expect(@sent_requests[0]["args"]["content"]).to eq("foobar")
     end
   end
 end
