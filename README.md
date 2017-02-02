@@ -25,7 +25,16 @@ And then execute:
 
 ## Usage
 
-TODO: Write usage instructions here
+After installing this Agent plugin in Huginn go to Credentials and add a
+new entry with name `todoist_api_token` and enter your Todoist API token
+there (you can find that in Todoist's web frontend from "Gear Menu" > Todoist
+Settings > Account tab).
+
+Then create a new agent and select "Todoist Agent" as type, give it a
+name and pick an event source.  Last not least provide some "content",
+i.e. what you want the new Todoist item to tell.  You can either just
+enter static text or re-use content from the incoming event by using
+some [liquid templating](https://github.com/cantino/huginn/wiki/Formatting-Events-using-Liquid).
 
 ## Development
 
