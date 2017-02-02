@@ -5,7 +5,7 @@ require "uri"
 describe Agents::TodoistAgent do
   before(:each) do
     @valid_options = {
-      "token" => "some_token_here",
+      "api_token" => "some_token_here",
       "content" => "foobar",
     }
     @checker = Agents::TodoistAgent.new(:name => "TodoistAgent", :options => @valid_options)
@@ -64,13 +64,13 @@ describe Agents::TodoistAgent do
     end
 
     it "should reject an empty token" do
-      @checker.options["token"] = nil
+      @checker.options["api_token"] = nil
       expect(@checker).not_to be_valid
     end
 
     it "should also allow a credential" do
       @checker.user.user_credentials.create :credential_name => "todoist_api_token", :credential_value => "some_credential_here"
-      @checker.options["token"] = nil
+      @checker.options["api_token"] = nil
       expect(@checker).to be_valid
     end
   end
@@ -182,7 +182,7 @@ describe Agents::TodoistAgent do
 
     it "should use the credential token if no token is present" do
       @checker.user.user_credentials.create :credential_name => "todoist_api_token", :credential_value => "some_credential_here"
-      @checker.options["token"] = nil
+      @checker.options["api_token"] = nil
 
       @expected_token = "some_credential_here"
       @checker.receive([@event])
@@ -194,7 +194,7 @@ describe Agents::TodoistAgent do
 
     it "should use the credential token if an empty token is given" do
       @checker.user.user_credentials.create :credential_name => "todoist_api_token", :credential_value => "some_credential_here"
-      @checker.options["token"] = ""
+      @checker.options["api_token"] = ""
 
       @expected_token = "some_credential_here"
       @checker.receive([@event])

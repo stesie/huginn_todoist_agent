@@ -11,7 +11,7 @@ module Agents
       <<-MD
         The Todoist Agent creates items on your Todoist.
 
-        To authenticate you need to either set `token` or provide a credential named
+        To authenticate you need to either set `api_token` or provide a credential named
         `todoist_api_token` to your Todoist API token.  You can find it within the
         Todoist web frontend from "Gear Menu" > Todoist Settings > Account tab.
 
@@ -34,7 +34,7 @@ module Agents
 
     def default_options
       {
-        "token" => "",
+        "api_token" => "",
         "content" => "{{ content }}",
         "date_string" => "today",
         "project_id" => "",
@@ -43,7 +43,7 @@ module Agents
       }
     end
 
-    form_configurable :token
+    form_configurable :api_token
     form_configurable :content, type: :text
     form_configurable :date_string
     form_configurable :project_id
@@ -55,7 +55,7 @@ module Agents
     end
 
     def validate_options
-      errors.add(:base, "you need to specify your Todoist token or provide a credential named todoist_api_token") unless options["token"].present? || credential("todoist_api_token").present?
+      errors.add(:base, "you need to specify your Todoist API token or provide a credential named todoist_api_token") unless options["api_token"].present? || credential("todoist_api_token").present?
     end
 
     def receive(incoming_events)
@@ -71,7 +71,7 @@ module Agents
           end
 
           log "creating item: #{item}"
-          todoist = Todoist::Client.new(interpolated["token"].present? ? interpolated["token"] : credential("todoist_api_token"))
+          todoist = Todoist::Client.new(interpolated["api_token"].present? ? interpolated["api_token"] : credential("todoist_api_token"))
           todoist.items.create(item)
           todoist.process!
         end
