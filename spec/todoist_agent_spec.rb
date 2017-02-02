@@ -1,12 +1,12 @@
-require 'rails_helper'
-require 'huginn_agent/spec_helper'
-require 'uri'
+require "rails_helper"
+require "huginn_agent/spec_helper"
+require "uri"
 
 describe Agents::TodoistAgent do
   before(:each) do
     @valid_options = {
-      'token' => 'some_token_here',
-      'content' => 'foobar',
+      "token" => "some_token_here",
+      "content" => "foobar",
     }
     @checker = Agents::TodoistAgent.new(:name => "TodoistAgent", :options => @valid_options)
     @checker.user = users(:bob)
@@ -15,12 +15,12 @@ describe Agents::TodoistAgent do
     @event = Event.new
     @event.agent = agents(:bob_weather_agent)
     @event.payload = {
-      'somekey' => 'somevalue',
-      'some_date' => 'May 23',
-      'some_project_id' => '2342',
-      'some_priority' => '2',
-      'a_single_label' => '42',
-      'some_labels' => '23,42,  5',
+      "somekey" => "somevalue",
+      "some_date" => "May 23",
+      "some_project_id" => "2342",
+      "some_priority" => "2",
+      "a_single_label" => "42",
+      "some_labels" => "23,42,  5",
     }
 
     @expected_token = "some_token_here"
@@ -77,7 +77,7 @@ describe Agents::TodoistAgent do
 
   describe "#receive" do
     describe "with static content configuration" do
-      it 'can create a new static item' do
+      it "can create a new static item" do
 	@checker.receive([@event])
 	expect(@sent_requests.length).to eq(1)
 	expect(@sent_requests[0]["type"]).to eq("item_add")
@@ -126,7 +126,7 @@ describe Agents::TodoistAgent do
     end
 
     describe "with content interpolation" do
-      it 'content can be interpolated' do
+      it "content can be interpolated" do
 	@checker.options["content"] = "Event Data: {{ somekey }}"
 	expect(@checker).to be_valid
 
@@ -175,7 +175,7 @@ describe Agents::TodoistAgent do
       end
     end
 
-    it 'creates two items for two events' do
+    it "creates two items for two events" do
       @checker.receive([@event, @event])
       expect(@sent_requests.length).to eq(2)
     end

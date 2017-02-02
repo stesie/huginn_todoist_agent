@@ -34,12 +34,12 @@ module Agents
 
     def default_options
       {
-        'token' => '',
-        'content' => '{{ content }}',
-        'date_string' => 'today',
-        'project_id' => '',
-        'labels' => '',
-        'priority' => '',
+        "token" => "",
+        "content" => "{{ content }}",
+        "date_string" => "today",
+        "project_id" => "",
+        "labels" => "",
+        "priority" => "",
       }
     end
 
@@ -55,23 +55,23 @@ module Agents
     end
 
     def validate_options
-      errors.add(:base, 'you need to specify your Todoist token or provide a credential named todoist_api_token') unless options['token'].present? || credential("todoist_api_token").present?
+      errors.add(:base, "you need to specify your Todoist token or provide a credential named todoist_api_token") unless options["token"].present? || credential("todoist_api_token").present?
     end
 
     def receive(incoming_events)
       incoming_events.each do |event|
         interpolate_with(event) do
-          item = { 'content' => interpolated['content'] }
-          item['date_string'] = interpolated['date_string'] if interpolated['date_string'].present?
-          item['project_id'] = interpolated['project_id'].to_i if interpolated['project_id'].present?
-          item['priority'] = interpolated['priority'].to_i if interpolated['priority'].present?
+          item = { "content" => interpolated["content"] }
+          item["date_string"] = interpolated["date_string"] if interpolated["date_string"].present?
+          item["project_id"] = interpolated["project_id"].to_i if interpolated["project_id"].present?
+          item["priority"] = interpolated["priority"].to_i if interpolated["priority"].present?
 
-          if interpolated['labels'].present?
-            item['labels'] = interpolated['labels'].split(%r{,\s*}).map(&:to_i)
+          if interpolated["labels"].present?
+            item["labels"] = interpolated["labels"].split(%r{,\s*}).map(&:to_i)
           end
 
           log "creating item: #{item}"
-          todoist = Todoist::Client.new(interpolated['token'].present? ? interpolated['token'] : credential("todoist_api_token"))
+          todoist = Todoist::Client.new(interpolated["token"].present? ? interpolated["token"] : credential("todoist_api_token"))
           todoist.items.create(item)
           todoist.process!
         end
