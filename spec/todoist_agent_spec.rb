@@ -69,7 +69,7 @@ describe Agents::TodoistAgent do
     end
 
     it "should also allow a credential" do
-      @checker.user.user_credentials.create :credential_name => "todoist_auth_token", :credential_value => "some_credential_here"
+      @checker.user.user_credentials.create :credential_name => "todoist_api_token", :credential_value => "some_credential_here"
       @checker.options["token"] = nil
       expect(@checker).to be_valid
     end
@@ -181,7 +181,7 @@ describe Agents::TodoistAgent do
     end
 
     it "should use the credential token if no token is present" do
-      @checker.user.user_credentials.create :credential_name => "todoist_auth_token", :credential_value => "some_credential_here"
+      @checker.user.user_credentials.create :credential_name => "todoist_api_token", :credential_value => "some_credential_here"
       @checker.options["token"] = nil
 
       @expected_token = "some_credential_here"
@@ -193,7 +193,7 @@ describe Agents::TodoistAgent do
     end
 
     it "should use the credential token if an empty token is given" do
-      @checker.user.user_credentials.create :credential_name => "todoist_auth_token", :credential_value => "some_credential_here"
+      @checker.user.user_credentials.create :credential_name => "todoist_api_token", :credential_value => "some_credential_here"
       @checker.options["token"] = ""
 
       @expected_token = "some_credential_here"
@@ -205,7 +205,7 @@ describe Agents::TodoistAgent do
     end
 
     it "should use the provided token, if both a credential and immediate token are given" do
-      @checker.user.user_credentials.create :credential_name => "todoist_auth_token", :credential_value => "some_credential_here"
+      @checker.user.user_credentials.create :credential_name => "todoist_api_token", :credential_value => "some_credential_here"
       @checker.receive([@event])
 
       expect(@sent_requests.length).to eq(1)

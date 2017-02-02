@@ -49,7 +49,7 @@ module Agents
     end
 
     def validate_options
-      errors.add(:base, 'you need to specify your Todoist token or provide a credential named todoist_auth_token') unless options['token'].present? || credential("todoist_auth_token").present?
+      errors.add(:base, 'you need to specify your Todoist token or provide a credential named todoist_api_token') unless options['token'].present? || credential("todoist_api_token").present?
     end
 
     def receive(incoming_events)
@@ -65,7 +65,7 @@ module Agents
           end
 
           log "creating item: #{item}"
-          todoist = Todoist::Client.new(interpolated['token'].present? ? interpolated['token'] : credential("todoist_auth_token"))
+          todoist = Todoist::Client.new(interpolated['token'].present? ? interpolated['token'] : credential("todoist_api_token"))
           todoist.items.create(item)
           todoist.process!
         end
