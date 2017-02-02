@@ -9,10 +9,16 @@ module Agents
 
     description do
       <<-MD
-        The Todoist Agent will create one item on your Todoist for every event it receives.
+        The Todoist Agent creates items on your Todoist.
 
-        Specify your Todoist API token (from Todoist Settings > Account) as `token` and
-        provide some `content`.
+        To authenticate you need to either set `token` or provide a credential named
+        `todoist_api_token` to your Todoist API token.  You can find it within the
+        Todoist web frontend from "Gear Menu" > Todoist Settings > Account tab.
+
+        Change `content` to whatever the new Todoist item should tell.  You can use liquid
+        templating to include parts from the incoming event in the new item.
+        Have a look at the [Wiki](https://github.com/cantino/huginn/wiki/Formatting-Events-using-Liquid)
+        to learn more about liquid templating.
 
         In order to set a due date provide a `date_string` (which may contain all date string
         features supported by Todoist).
