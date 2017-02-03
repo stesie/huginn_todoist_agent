@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/stesie/huginn_todoist_agent.svg?branch=master)](https://travis-ci.org/stesie/huginn_todoist_agent)
 [![Gem Version](https://badge.fury.io/rb/huginn_todoist_agent.svg)](https://badge.fury.io/rb/huginn_todoist_agent)
+[![Coverage Status](https://coveralls.io/repos/github/stesie/huginn_todoist_agent/badge.svg?branch=master)](https://coveralls.io/github/stesie/huginn_todoist_agent?branch=master)
 
 The Todoist Agent is a plugin for [Huginn](https://github.com/cantino/huginn) that
 creates one item on your [Todoist](https://todoist.com) for every event it receives.
