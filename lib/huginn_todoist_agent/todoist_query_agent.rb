@@ -16,6 +16,11 @@ module Agents
 
         Change `query` to the [Todoist filter expression](https://support.todoist.com/hc/en-us/articles/205248842-Filters)
         you'd like to be carried out. 
+
+        The `mode` option allows to control what information is emitted.  With the default value
+        of `items` an event is emitted for every item that matches the search result.  And consequently
+        no event is emitted if no items match the query.
+        With `count` the agent always emits a single event, that just tells the number of matched items.
       MD
     end
 
@@ -25,11 +30,13 @@ module Agents
       {
         "api_token" => "",
         "query" => "today | overdue",
+        "mode" => "items",
       }
     end
 
     form_configurable :api_token
     form_configurable :query, type: :text
+    form_configurable :mode, type: :array, values: %w(items count)
 
     def working?
       !recent_error_logs?
@@ -53,8 +60,15 @@ module Agents
       todoist = Todoist::Client.new(interpolated["api_token"].present? ? interpolated["api_token"] : credential("todoist_api_token"))
       result = TodoistQuerynaut::Client.new(todoist).run(options["query"])
 
-      result.each do |item|
-        create_event payload: item
+      case options["mode"]
+      when "items"
+        result.each do |item|
+          create_event payload: item
+        end
+
+      when "count"
+        create_event payload: { "matched_items" => result.size }
+
       end
     end
   end

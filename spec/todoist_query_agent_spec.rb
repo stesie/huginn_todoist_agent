@@ -9,6 +9,7 @@ describe Agents::TodoistQueryAgent do
     @valid_options = {
       "api_token" => "some_token_here",
       "query" => "overdue",
+      "mode" => "items",
     }
     @checker = Agents::TodoistQueryAgent.new(:name => "TodoistQueryAgent", :options => @valid_options)
     @checker.user = users(:bob)
@@ -51,6 +52,14 @@ describe Agents::TodoistQueryAgent do
 
     it "should execute the query and emit events for every item" do
       expect { @checker.check }.to change {Event.count}.by(2)
+    end
+
+    it "should emit the number of matched items with mode=count" do
+      @checker.options["mode"] = "count"
+      expect { @checker.check }.to change {Event.count}.by(1)
+
+      event = Event.last
+      expect(event.payload).to eq({ "matched_items" => 2 })
     end
   end
 end
