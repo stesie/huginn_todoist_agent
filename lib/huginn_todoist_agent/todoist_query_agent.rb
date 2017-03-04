@@ -47,7 +47,15 @@ module Agents
       else
         errors.add(:base, "query must not be empty")
       end
+    end
 
+    def check
+      todoist = Todoist::Client.new(interpolated["api_token"].present? ? interpolated["api_token"] : credential("todoist_api_token"))
+      result = TodoistQuerynaut::Client.new(todoist).run(options["query"])
+
+      result.each do |item|
+        create_event payload: item
+      end
     end
   end
 end

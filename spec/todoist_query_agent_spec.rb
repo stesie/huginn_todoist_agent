@@ -2,11 +2,13 @@ require "rails_helper"
 require "huginn_agent/spec_helper"
 require "uri"
 
+require_relative "./spec_helper"
+
 describe Agents::TodoistQueryAgent do
   before(:each) do
     @valid_options = {
       "api_token" => "some_token_here",
-      "query" => "today",
+      "query" => "overdue",
     }
     @checker = Agents::TodoistQueryAgent.new(:name => "TodoistQueryAgent", :options => @valid_options)
     @checker.user = users(:bob)
@@ -40,5 +42,15 @@ describe Agents::TodoistQueryAgent do
     end
   end
 
+  describe "#check" do
+    before :each do
+      stub_request(:post, "https://todoist.com/API/v6/query").
+        with(:body => {"queries" => "[\"overdue\"]", "token" => "some_token_here"}).
+        to_return(:status => 200, :body => json_response_raw("query_overdue"), :headers => {})
+    end
 
+    it "should execute the query and emit events for every item" do
+      expect { @checker.check }.to change {Event.count}.by(2)
+    end
+  end
 end
