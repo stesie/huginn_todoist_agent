@@ -33,6 +33,11 @@ describe Agents::TodoistQueryAgent do
       @checker.options["query"] = nil
       expect(@checker).not_to be_valid
     end
+
+    it "should reject invalid query syntax" do
+      @checker.options["query"] = "some_invalid_query"
+      expect(@checker).not_to be_valid
+    end
   end
 
 

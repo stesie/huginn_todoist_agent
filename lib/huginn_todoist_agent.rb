@@ -4,6 +4,7 @@ require 'huginn_agent'
 # still starts up successfully, yet shows "Missing Gems" error in the frontend.
 begin
   require 'todoist'
+  require 'todoist_querynaut'
 rescue LoadError
 end
 

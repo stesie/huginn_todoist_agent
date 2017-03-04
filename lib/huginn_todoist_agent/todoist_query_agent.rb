@@ -4,7 +4,7 @@ module Agents
 
     cannot_receive_events!
 
-    gem_dependency_check { defined?(Todoist::Client) }
+    gem_dependency_check { defined?(Todoist::Client) && defined?(TodoistQuerynaut::Client) }
 
     description do
       <<-MD
@@ -37,7 +37,17 @@ module Agents
 
     def validate_options
       errors.add(:base, "you need to specify your Todoist API token or provide a credential named todoist_api_token") unless options["api_token"].present? || credential("todoist_api_token").present?
-      errors.add(:base, "query must not be empty") unless options["query"].present?
+
+      if options["query"].present?
+        begin
+          TodoistQuerynaut::Parser.parse(options["query"])
+        rescue Exception
+          errors.add(:base, "query cannot be parsed correctly, check against Todoist filter expression manual")
+        end
+      else
+        errors.add(:base, "query must not be empty")
+      end
+
     end
   end
 end
