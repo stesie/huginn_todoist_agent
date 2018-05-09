@@ -20,6 +20,8 @@ module Agents
       MD
     end
 
+    default_schedule "never"
+
     def default_options
       {
         "api_token" => "",
