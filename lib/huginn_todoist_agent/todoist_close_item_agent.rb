@@ -38,6 +38,13 @@ module Agents
       errors.add(:base, "you need to specify your Todoist API token or provide a credential named todoist_api_token") unless options["api_token"].present? || credential("todoist_api_token").present?
     end
 
+    def check
+      log "closing item: #{interpolated["id"]}"
+      todoist = Todoist::Client.new(interpolated["api_token"].present? ? interpolated["api_token"] : credential("todoist_api_token"))
+      todoist.items.close(interpolated["id"])
+      todoist.queue.process!
+    end
+
     def receive(incoming_events)
       incoming_events.each do |event|
         interpolate_with(event) do
