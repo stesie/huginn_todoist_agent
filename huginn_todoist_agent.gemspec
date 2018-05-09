@@ -25,6 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
 
   spec.add_runtime_dependency "huginn_agent", '~> 0'
-  spec.add_runtime_dependency 'ruby-todoist-api', '~> 0.3'
+  spec.add_runtime_dependency 'ruby-todoist-api-v7', '~> 1.0'
   spec.add_runtime_dependency "todoist_querynaut", '~> 0.1'
 end
