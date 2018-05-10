@@ -25,7 +25,7 @@ describe Agents::TodoistAgent do
 
     @expected_token = "some_token_here"
     @sent_requests = Array.new
-    stub_request(:post, "https://todoist.com/API/v6/sync").
+    stub_request(:post, "https://todoist.com/API/v7/sync").
       to_return { |request|
 	expect(request.headers["Content-Type"]).to eq("application/x-www-form-urlencoded")
 

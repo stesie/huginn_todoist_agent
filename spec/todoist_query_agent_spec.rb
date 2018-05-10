@@ -45,7 +45,7 @@ describe Agents::TodoistQueryAgent do
 
   describe "#check" do
     before :each do
-      stub_request(:post, "https://todoist.com/API/v6/query").
+      stub_request(:post, "https://todoist.com/API/v7/query").
         with(:body => {"queries" => "[\"overdue\"]", "token" => "some_token_here"}).
         to_return(:status => 200, :body => json_response_raw("query_overdue"), :headers => {})
     end
