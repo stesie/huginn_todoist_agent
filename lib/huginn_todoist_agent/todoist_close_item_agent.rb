@@ -15,8 +15,8 @@ module Agents
         Todoist web frontend from "Gear Menu" > Todoist Settings > Account tab.
 
 	Change `id` to whatever the ID of the item you would want to be closed is.  You
-	can route query results from "Todoist Query Agent" to this agent, as it will
-	pick the `id` property from it (and ignore the rest).
+	can also route query results from "Todoist Query Agent" to this agent and
+	interpolate it using `{{ id }}` to close all items included in the search result.
       MD
     end
 
