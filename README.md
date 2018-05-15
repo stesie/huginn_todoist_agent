@@ -51,6 +51,8 @@ Make sure to delete the `spec/huginn` directory and re-run `rake` after changing
 
 After the setup is done `rake spec` will only run the tests, without cloning the Huginn source again.
 
+This requires a local MySQL server running.  Credentials can be configured in `spec/huginn/.env`.
+
 ## Contributing
 
 1. Fork it ( https://github.com/stesie/huginn_todoist_agent/fork )
