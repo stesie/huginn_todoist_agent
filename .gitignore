@@ -2,3 +2,4 @@ spec/huginn
 .env
 Gemfile.lock
 coverage
+huginn_todoist_agent-*.gem
