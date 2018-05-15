@@ -38,6 +38,7 @@ module Agents
 
     def validate_options
       errors.add(:base, "you need to specify your Todoist API token or provide a credential named todoist_api_token") unless options["api_token"].present? || credential("todoist_api_token").present?
+      errors.add(:base, "id must not be empty, use `{{ id }}` if you'd like Huginn to use the id from the incoming event") unless options["id"].present?
     end
 
     def check
