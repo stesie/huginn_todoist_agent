@@ -4,12 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "huginn_todoist_agent"
-  spec.version       = '0.5.0'
+  spec.version       = '0.6.0'
   spec.authors       = ["Stefan Siegl"]
   spec.email         = ["stesie@brokenpipe.de"]
 
-  spec.summary       = %q{Huginn agent to add items to your Todoist.}
-  spec.description   = %q{The Todoist Agent will create one item on your Todoist for every Huginn event it receives.}
+  spec.summary       = %q{Huginn agent to add, query and close items on your Todoist.}
+  spec.description   = %q{The Todoist Agents allow to create new as well as query and close existing items on your Todoist.}
 
   spec.homepage      = "https://github.com/stesie/huginn_todoist_agent"
 
