@@ -1,5 +1,28 @@
 # TodoistAgent
 
+## NOTE: This Agent No Longer Works
+The Todoist API has changed and it no longer works. However, the Post Agent works perfectly with the Todoist [REST API](https://developer.todoist.com/rest/v1/). See below for an example of how to set this up:
+```json
+{
+  "post_url": "https://api.todoist.com/rest/v1/tasks",
+  "expected_receive_period_in_days": "1",
+  "content_type": "json",
+  "method": "post",
+  "payload": {
+    "content": "Test from api",
+    "due_string": "today",
+    "priority": 3
+  },
+  "headers": {
+    "X-Request-Id": "{{ 'now' | date: '%s%N' }}",
+    "Authorization": "Bearer PUT_YOUR_TOKEN_HERE"
+  },
+  "emit_events": "true",
+  "no_merge": "true",
+  "output_mode": "clean"
+}
+```
+
 [![Build Status](https://travis-ci.org/stesie/huginn_todoist_agent.svg?branch=master)](https://travis-ci.org/stesie/huginn_todoist_agent)
 [![Gem Version](https://badge.fury.io/rb/huginn_todoist_agent.svg)](https://badge.fury.io/rb/huginn_todoist_agent)
 [![Coverage Status](https://coveralls.io/repos/github/stesie/huginn_todoist_agent/badge.svg?branch=master)](https://coveralls.io/github/stesie/huginn_todoist_agent?branch=master)
